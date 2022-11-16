@@ -1,4 +1,12 @@
 library(deSolve)
+library(ggplot2)
+####META INFO####
+#From Abrams 1993. Effect of Increased Productivity on the Abundances of Trophic Levels.
+#The American Naturalist, Vol. 141, No. 3. (Mar., 1993), pp. 351-371
+#URL: http://links.jstor.org/sici?sici=0003-0147%28199303%29141%3A3%3C351%3AEOIPOT%3E2.0.CO%3B2-%23
+#Model based on figure 2.1.
+
+####FUNCTION####
 predprey.log.prey <- function(t, y, params) {
   R <- y[1]
   C <- y[2]
@@ -10,32 +18,34 @@ predprey.log.prey <- function(t, y, params) {
     return(list(c(dR.dt, dC.dt, dP.dt)))
   })
 }
-r <- 2
-e1 <- 0.3
-e2 <- 0.3
-a1 <- 0.3
-a2 <- 0.3
-d <- 0.4
-k <- 50
+r <- 2 #Intrinsic growth of resource (logistic)
+e1 <- 0.3 #Efficacy of take-up from resource to consumer
+e2 <- 0.3 #Efficacy of take-up from consumer to predator
+a1 <- 0.3 #Attack rate of consumer on resource
+a2 <- 0.3 #Attack rate of predator on consumer
+d <- 0.4 #Death rate (of predator)
+k <- 50 #Carrying capacity of resource
 
-R0 <- 3
-C0 <- 2
-P0 <- 3
-params.log.prey1 <- c(r = r, e1 = e1, e2 = e2, a1 = a1, a2 = a2, d = d, k = k)
-MaxTime <- 50
-Time <- seq(0, MaxTime, by = 0.5)
-log.prey.out <- ode(c(R0, C0, P0), Time, predprey.log.prey, params.log.prey1)
+R0 <- 3 #Initial resource population
+C0 <- 2 #Initial consumer population
+P0 <- 3 #Initial peradtor population
+params.log.prey1 <- c(r = r, e1 = e1, e2 = e2, a1 = a1, a2 = a2, d = d, k = k) #Specify parameters
+MaxTime <- 50 #Set time point to solve until
+Time <- seq(0, MaxTime, by = 0.5) #Set time steps
+log.prey.out <- ode(c(R0, C0, P0), Time, predprey.log.prey, params.log.prey1) #Solve differential equations using deSolve
 
+####PLOTTING####
 matplot(Time, (log.prey.out[, 2:4]), type = "l", lty = 2:4, col=1, ylab = "Population Size", xlab="Time", ylim = c(0,30))
 legend("top", c(expression("resource1"), expression("resource2"), expression("predator")), lty = 2:4, bty = "n")
 
 ####PLOT WITH GGOPLOT####
 library(ggplot2)
 library(tidyr)
-#Reshape to long format as it's more tidy
+#Reshape to long format
 log.prey.out <- as.data.frame(log.prey.out)
 log.prey.out$time <- as.numeric(log.prey.out$time)
 log.prey.out <- gather(log.prey.out, key = "Trophic level", value = "Population_size", -time)
+
 ggplot(data = log.prey.out, aes(x = time, y = Population_size, linetype = `Trophic level`)) +
   geom_line() +
   theme_bw() + 
