@@ -21,17 +21,32 @@ e1 <- 0.5
 e2 <- 0.5
 e3 <- 0.2
 e4 <- 0.2
-d <- 0.5
+d <- 0.4
 k <- 20
 
 R0 <- 2
 C10 <- 6
 C20 <- 5
-P0 <- 3
+P0 <- 18
 params.log.prey1 <- c(r = r, e1 = e1, e2 = e2, e3 = e3, e4 = e4, a1 = a1, a2 = a2, a3 = a3, a4 = a4, d = d, k = k)
-MaxTime <- 500
+MaxTime <- 50
 Time <- seq(0, MaxTime, by = 0.5)
 log.prey.out <- ode(c(R0, C10, C20, P0), Time, predprey.log.prey, params.log.prey1)
 
 matplot(Time, (log.prey.out[, 2:5]), type = "l", lty = 2:5, col = c(1, 2, 3, 4), ylab = "Population Size", xlab="Time", ylim = c(0,10))
 legend("top", c(expression("resource"), expression("consumer one"), expression("consumer two"), expression("predator")), lty = 2:5, bty = "n")
+
+
+####PLOT WITH GGOPLOT####
+library(ggplot2)
+library(tidyr)
+#Reshape to long format as it's more tidy
+log.prey.out <- as.data.frame(log.prey.out)
+log.prey.out$time <- as.numeric(log.prey.out$time)
+log.prey.out <- gather(log.prey.out, key = "Trophic level", value = "Population_size", -time)
+ggplot(data = log.prey.out, aes(x = time, y = Population_size, linetype = `Trophic level`)) +
+  geom_line() +
+  theme_bw() + 
+  labs(x = "Time", y = "Population") +
+  scale_linetype_discrete(labels=c('Prey', 'Consumer 1','Consumer 2', 'Predator'))
+
