@@ -17,13 +17,13 @@ a1 <- 0.2
 a2 <- 0.2
 d <- 0.4
 k <- 50
-L <- 50
+L <- 60
 
 R10 <- 3
 R20 <- 2
 P0 <- 3
 params.log.prey1 <- c(r = r, e1 = e1, e2 = e2, a1 = a1, a2 = a2, d = d, k = k, L = L)
-MaxTime <- 500
+MaxTime <- 50
 Time <- seq(0, MaxTime, by = 0.5)
 log.prey.out <- ode(c(R10, R20, P0), Time, predprey.log.prey, params.log.prey1)
 
@@ -41,7 +41,7 @@ ggplot(data = log.prey.out, aes(x = time, y = Population_size, linetype = `Troph
   geom_line() +
   theme_bw() + 
   labs(x = "Time", y = "Population") +
-  scale_linetype_discrete(labels=c('Prey 1', 'Prey 2', 'Predator')) + lims(x=c(0,100))
+  scale_linetype_discrete(labels=c('Prey 1', 'Prey 2', 'Predator'))
 
 
 
