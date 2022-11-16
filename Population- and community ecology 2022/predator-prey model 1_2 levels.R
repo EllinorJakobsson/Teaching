@@ -55,8 +55,8 @@ MaxTime <- 50 # length of the time series, can be changed at any time
 Time <- seq(0, MaxTime, by = 0.1) # here we produce a sequence of time points at which we will determine the population densities
 LV.out2 <- ode(c(R02, C02), Time, predpreyLV, params1) # here we call the function "ode" that does the hard work of numerical integration and which is part of the package "deSolve"
 
-R03 <- 4
-C03 <- 8
+R03 <- 1
+C03 <- 3
 params1 <- c(r = r, a = a, e = e, d = d, k = k)
 MaxTime <- 50 # length of the time series, can be changed at any time
 Time <- seq(0, MaxTime, by = 0.1) # here we produce a sequence of time points at which we will determine the population densities
