@@ -1,0 +1,83 @@
+---
+title: "Predator-prey model with two interactions"
+author: "Ellinor Jakobsson"
+date: '2022-11-14'
+output: html_document
+---
+  
+#### Tips for working in Rmarkdown: 
+* If you haven't worked with RMarkdown before you may need to *install the package* by typing this code *install.packages("rmarkdown")*  
+* To close all chunks on windows: *Alt+o*  
+* To open all chunks on windows: *Alt+shift+o*  
+* To compile the script into an HTML-file, press *knit*  
+
+```{r include=FALSE}
+library(deSolve) #Loading all packages
+library(ggplot2)
+library(tidyr)
+```
+
+#### This is the **model** of two interactions  
+1. Can you understand what the different parts of the differential equations mean biologically?
+
+```{r echo=TRUE, warning=FALSE}
+predpreyLV <- function(t, y, params) {
+  R <- y[1]
+  C <- y[2]
+  with(as.list(params), {
+    dR.dt <- r * R * (1 - R / k) - a * R * C #Building the model
+    dC.dt <- e * a * R * C - d * C
+    return(list(c(dR.dt, dC.dt))) #list of the differential equations, add
+  })
+} 
+```
+
+#### These are the **parameters** specified
+2. Discuss and *understand* what role they play in the equation  
+```{r}
+r <- 2 #Intrinsic growth rate of resource (logistic)
+a <- 0.2 #Attack rate of predator on resource
+e <- 0.2 #Efficacy of take-up from resource to predator
+d <- 0.4 #Death rate of predator
+k <- 50 #Carrying capacity of resource
+
+R0 <- 2 #Initial resource population
+C0 <- 6 #Initial predator population
+params1 <- c(r = r, a = a, e = e, d = d, k = k) # specify parameters
+```
+
+```{r warning=FALSE, include=FALSE}
+####RUN MODEL####
+MaxTime <- 50 # length of the time series, can be changed at any time
+Time <- seq(0, MaxTime, by = 0.1) # here we produce a sequence of time points at which we will determine the population densities
+LV.out1 <- ode(c(R0, C0), Time, predpreyLV, params1) # here we call the function "ode" that does the hard work of numerical integration and which is part of the package "deSolve"
+```
+
+#### **Plot** the model...
+* ...using *matplot*  
+```{r echo=FALSE}
+matplot(Time, (LV.out1[, 2:3]), type = "l", lty = 1:5, col=1:5, ylab = "Population Density", xlab="Time")
+legend("top", c(expression("resource"), expression("consumer")), lty = 1:5, col = 1:5, lwd = 2, bty = "n", cex = 0.75) 
+
+```
+
+* ...using *ggplot*  
+```{r echo=FALSE}
+#Reshape to long format
+LV.out <- as.data.frame(LV.out1)
+LV.out$time <- as.numeric(LV.out$time)
+LV.out <- gather(LV.out, key = "Trophic level", value = "Population_size", -time)
+#Plot
+ggplot(data = LV.out, aes(x = time, y = Population_size, col = `Trophic level`)) + geom_line() +
+  theme_bw() + 
+  labs(x = "Time", y = "Population density") + scale_color_brewer(palette="Set1", labels=c('Resource', 'Consumer'))
+
+```
+
+#### Your **task**    
+3. Discuss and interpret how the species interact in the different models and compare them. All the tasks and questions are specified in the document   
+4. Hand in one HTML Rmarkdown file with the **results** and **conclusions** of all the models you have built during this exercise according to the document     
+
+
+
+
