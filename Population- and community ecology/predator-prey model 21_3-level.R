@@ -14,8 +14,8 @@ predprey.log.prey <- function(t, y, params) {
   
   with(as.list(params), {
     dR.dt <- r * R * (1 - R / k) - a1 * R * C1 - a2 * R * C2
-    dC1.dt <- e1 * a1 * R * C1 - a3 * C1 * P - dC * C1
-    dC2.dt <- e2 * a2 * R * C2 - a4 * C2 * P - dC * C2
+    dC1.dt <- e1 * a1 * R * C1 - a3 * C1 * P - dC * C1 #Try this without the natural mortality of the consumer
+    dC2.dt <- e2 * a2 * R * C2 - a4 * C2 * P - dC * C2 #Try this without the natural mortality of the consumer
     dP.dt <-  e3 * a3 * C1 * P + e4 * a4 * C2 * P - d * P
     return(list(c(dR.dt, dC1.dt, dC2.dt, dP.dt)))
   })
@@ -41,8 +41,8 @@ C10 <- 6 #Initial consumer 1 population
 C20 <- 5 #Initial consumer 2 population
 P0 <- 3 #Initial predator population
 params.log.prey1 <- c(r = r, e1 = e1, e2 = e2, e3 = e3, e4 = e4, a1 = a1, a2 = a2, a3 = a3, a4 = a4, d = d, k = k, dC = dC)
-MaxTime <- 50
-Time <- seq(0, MaxTime, by = 0.5)
+MaxTime <- 500
+Time <- seq(0, MaxTime, by = 0.1)
 log.prey.out <- ode(c(R0, C10, C20, P0), Time, predprey.log.prey, params.log.prey1)
 
 ####PLOTTING####
