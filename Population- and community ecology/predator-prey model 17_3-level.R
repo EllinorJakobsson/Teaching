@@ -14,9 +14,9 @@ predprey.log.prey <- function(t, y, params) {
   
   with(as.list(params), {
     dR.dt <- r * R * (1 - R / k) - a1 * R * C1 - a2 * R * C2
-    dC1.dt <- e1 * a1 * R * C1 - a3 * C1 * P
-    dC2.dt <- e2 * a2 * R * C2 - d1 * C2
-    dP.dt <-  e3 * a3 * C1 * P - d2 * P
+    dC1.dt <- e1 * a1 * R * C1 - a3 * C1 * P - d1 * C1
+    dC2.dt <- e2 * a2 * R * C2 - d2 * C2
+    dP.dt <-  e3 * a3 * C1 * P - d3 * P
     return(list(c(dR.dt, dC1.dt, dC2.dt, dP.dt)))
   })
 }
@@ -30,15 +30,16 @@ a1 <- 0.2 #Attack rate of consumer 1 on resource
 a2 <- 0.2 #Attack rate of consumer 2 on resource
 a3 <- 0.5 #Attack rate of predator on consumer 1
 
-d1 <- 0.5 #Death rate of consumer 2 (no predation)
-d2 <- 0.5 #Death rate of predator
-k <- 50 #Carrying capacity of resource
+d1 <- 0.005 #Mortality of consumer 1 (no predation)
+d2 <- 0.5 #Mortality of consumer 2
+d3 <- 0.1 #Mortality of predator
+k <- 10 #Carrying capacity of resource
 
 R0 <- 2 #Initial resource population
 C10 <- 6 #Initial consumer 1 population
 C20 <- 5 #Initial consumer 2 population
 P0 <- 3 #Initial predator population
-params.log.prey1 <- c(r = r, e1 = e1, e2 = e2, e3 = e3, a1 = a1, a2 = a2, a3 = a3, d1 = d1, d2 = d2, k = k)
+params.log.prey1 <- c(r = r, e1 = e1, e2 = e2, e3 = e3, a1 = a1, a2 = a2, a3 = a3, d1 = d1, d2 = d2, d3 = d3, k = k)
 MaxTime <- 500
 Time <- seq(0, MaxTime, by = 0.5)
 log.prey.out <- ode(c(R0, C10, C20, P0), Time, predprey.log.prey, params.log.prey1)

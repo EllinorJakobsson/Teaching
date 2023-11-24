@@ -13,23 +13,24 @@ predprey.log.prey <- function(t, y, params) {
   P <- y[3]
   with(as.list(params), {
     dR.dt <- r * R * (1 - R / k) - a1 * R * C
-    dC.dt <- e1 * a1 * R * C - P * C * a2
+    dC.dt <- e1 * a1 * R * C - P * C * a2 - d1*C
     dP.dt <- e2 * a2 * C * P - d * P
     return(list(c(dR.dt, dC.dt, dP.dt)))
   })
 }
-r <- 2 #Intrinsic growth of resource (logistic)
-e1 <- 0.3 #Efficacy of take-up from resource to consumer
-e2 <- 0.3 #Efficacy of take-up from consumer to predator
-a1 <- 0.3 #Attack rate of consumer on resource
-a2 <- 0.3 #Attack rate of predator on consumer
-d <- 0.4 #Death rate (of predator)
-k <- 50 #Carrying capacity of resource
+r <- 2 #Intrinsic growth of resource; the same for both
+e1 <- 0.5 #Efficacy of take-up from resource to consumer
+e2 <- 0.5 #Efficacy of take-up from consumer to predator
+a1 <- 0.5 #Attack rate of consumer on resource
+a2 <- 0.5 #Attack rate of predator on consumer
+d1 <- 0.005 #Mortality of consumer
+d <- 0.5 #Mortality of predator
+k <- 10 #Carrying capacity of resource
 
-R0 <- 3 #Initial resource population
-C0 <- 2 #Initial consumer population
+R0 <- 2 #Initial resource population
+C0 <- 6 #Initial consumer population
 P0 <- 3 #Initial peradtor population
-params.log.prey1 <- c(r = r, e1 = e1, e2 = e2, a1 = a1, a2 = a2, d = d, k = k) #Specify parameters
+params.log.prey1 <- c(r = r, e1 = e1, e2 = e2, a1 = a1, a2 = a2, d = d, d1 = d1, k = k) #Specify parameters
 MaxTime <- 50 #Set time point to solve until
 Time <- seq(0, MaxTime, by = 0.5) #Set time steps
 log.prey.out <- ode(c(R0, C0, P0), Time, predprey.log.prey, params.log.prey1) #Solve differential equations using deSolve

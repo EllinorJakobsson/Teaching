@@ -23,12 +23,12 @@ e2 <- 0.2 #Efficacy of take-up from resource 2 to predator
 a1 <- 0.2 #Attack rate of predator on resource 1
 a2 <- 0.2 #Attack rate of predator on resource 2
 d <- 0.4 #Death rate of predator
-k <- 50 #Carrying capacity of resource 1
-L <- 60 #Carrying capacity of resource 2
+k <- 10 #Carrying capacity of resource 1
+L <- 10 #Carrying capacity of resource 2
 
-R10 <- 3 #Initial resource 1 population
-R20 <- 2 #Initial resource 2 population
-P0 <- 3 #Initial predator population
+R10 <- 10 #Initial resource 1 population
+R20 <- 10 #Initial resource 2 population
+P0 <- 5 #Initial predator population
 params.log.prey1 <- c(r = r, e1 = e1, e2 = e2, a1 = a1, a2 = a2, d = d, k = k, L = L)
 MaxTime <- 50
 Time <- seq(0, MaxTime, by = 0.5)
