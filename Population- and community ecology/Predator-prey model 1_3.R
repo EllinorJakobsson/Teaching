@@ -3,7 +3,6 @@ library(ggplot2)
 ####META INFO####
 #From Abrams 1993. Effect of Increased Productivity on the Abundances of Trophic Levels.
 #The American Naturalist, Vol. 141, No. 3. (Mar., 1993), pp. 351-371
-#URL: http://links.jstor.org/sici?sici=0003-0147%28199303%29141%3A3%3C351%3AEOIPOT%3E2.0.CO%3B2-%23
 #Model based on figure 2.1.
 
 ####FUNCTION####
